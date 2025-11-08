@@ -6,24 +6,24 @@ export const userDataContext = createContext();
 
 // Configure axios defaults
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+    baseURL: 'http://localhost:5000/api',
+    withCredentials: true,
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 
 // Add response interceptor to handle 401 Unauthorized responses
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized access (e.g., redirect to login)
-      console.log('User not authenticated, redirecting to login');
-      // You might want to clear user data here
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            // Handle unauthorized access (e.g., redirect to login)
+            console.log('User not authenticated, redirecting to login');
+            // You might want to clear user data here
+        }
+        return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
 );
 
 /**
@@ -33,7 +33,7 @@ api.interceptors.response.use(
 export default function UserContext({ children }) {
     // API configuration
     const ServerURL = "http://localhost:5000";
-    
+
     // Authentication state
     const [userData, setUserData] = useState(null);
     const [authChecked, setAuthChecked] = useState(false);
@@ -51,7 +51,6 @@ export default function UserContext({ children }) {
     const fetchCurrentUser = useCallback(async () => {
         setIsLoading(true);
         setError(null);
-        
         try {
             const response = await api.get('/user/current');
             setUserData(response.data);
@@ -61,7 +60,6 @@ export default function UserContext({ children }) {
                 status: err.response?.status,
                 data: err.response?.data
             });
-            
             // Only set error if it's not a 401 (unauthorized) error
             if (err.response?.status !== 401) {
                 setError(err.response?.data?.message || 'Failed to fetch user data');
@@ -72,6 +70,44 @@ export default function UserContext({ children }) {
             setAuthChecked(true);
         }
     }, []);
+    // const fetchCurrentUser = useCallback(async () => {
+    //     setIsLoading(true);
+    //     setError(null);
+
+    //     try {
+    //         // Check if we have a token in localStorage
+    //         const token = localStorage.getItem('token');
+
+    //         // If no token, don't make the request
+    //         if (!token) {
+    //             setUserData(null);
+    //             setAuthChecked(true);
+    //             setIsLoading(false);
+    //             return;
+    //         }
+
+    //         // Set the authorization header
+    //         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    //         const response = await api.get('/user/current');
+    //         setUserData(response.data);
+    //     } catch (err) {
+    //         // Handle 401/400 errors silently (no error message for missing/invalid token)
+    //         if (err.response?.status === 401 || err.response?.status === 400) {
+    //             console.log('No valid session found, please log in');
+    //             localStorage.removeItem('token');
+    //             delete api.defaults.headers.common['Authorization'];
+    //             setUserData(null);
+    //         } else {
+    //             // Only show error for other types of errors
+    //             console.error('Error fetching user data:', err);
+    //             setError('Failed to fetch user data');
+    //         }
+    //     } finally {
+    //         setIsLoading(false);
+    //         setAuthChecked(true);
+    //     }
+    // }, []);
 
     /**
      * Sends a command to the Gemini assistant
@@ -84,8 +120,8 @@ export default function UserContext({ children }) {
         }
 
         try {
-            const response = await api.post('/user/asktoassistant', { 
-                command: command.trim() 
+            const response = await api.post('/user/asktoassistant', {
+                command: command.trim()
             });
             return response.data;
         } catch (error) {
@@ -107,13 +143,11 @@ export default function UserContext({ children }) {
     const contextValue = {
         // Server configuration
         ServerURL,
-        
         // User data and auth
         userData,
         setUserData,
         authChecked,
         setAuthChecked,
-        
         // Image states
         frontEndImage,
         setFrontEndImage,
@@ -121,10 +155,8 @@ export default function UserContext({ children }) {
         setBackEndImage,
         selectedImage,
         setSelectedImage,
-        
         // API functions
         geminiResponse,
-        
         // Loading and error states
         isLoading,
         error

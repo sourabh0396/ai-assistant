@@ -12,7 +12,7 @@ export default function Customize() {
     ServerURL,
     userData, setUserData,
     authChecked,
-    frontEndImage, setFrontEndImage, backEndImage, setBackEndImage, selectdImage, setSelectdImage
+    frontEndImage, setFrontEndImage, backEndImage, setBackEndImage, selectedImage, setSelectedImage
   } = useContext(userDataContext);
   const navigate = useNavigate();
   // const [frontEndImage, setFrontEndImage] = useState(null);
@@ -56,7 +56,7 @@ export default function Customize() {
       Promise.resolve().then(() => {
         setBackEndImage(file);
         setFrontEndImage(previewUrl);
-        setSelectdImage("input");
+        setSelectedImage("input");
         console.log('State updated with new image');
       });
     } catch (error) {
@@ -93,13 +93,13 @@ export default function Customize() {
           <div
             className={`w-[80px] h-[160px] lg:w-[150px] lg:h-[250px] bg-[#161212e1] rounded-2xl overflow-hidden 
             cursor-pointer flex justify-center items-center relative
-            ${selectdImage === 'input'
+            ${selectedImage === 'input'
                 ? 'border-4 border-white shadow-2xl shadow-gray-900'
                 : 'border-2 border-[#0000ff80] hover:border-4 hover:border-white hover:shadow-2xl hover:shadow-gray-900'
               }`}
             onClick={() => {
               inputImage.current.click();
-              setSelectdImage("input");
+              setSelectedImage("input");
             }}
           >
             {!frontEndImage ? (
@@ -121,7 +121,7 @@ export default function Customize() {
             onChange={handleImage}
           />
         </div>
-        {selectdImage && (selectdImage !== "input" || backEndImage) ? <button
+        {selectedImage && (selectedImage !== "input" || backEndImage) ? <button
           className='mt-6 px-6 py-2 text-black bg-white rounded-4xl hover:px-8 transition cursor-pointer
           duration-800 shadow-lg font-bold' onClick={() => navigate("/customize2")}> Next </button> : null}
       </div>
