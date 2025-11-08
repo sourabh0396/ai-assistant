@@ -105,14 +105,14 @@ export const askToAssistant = async (req, res) => {
         }
 
         // If we get here, return the raw result
-        return res.json({
-            success: true,
-            data: {
-                type: 'general',
-                userInput: command,
-                response: result
-            }
-        });
+        // return res.json({
+        //     success: true,
+        //     data: {
+        //         type: 'general',
+        //         userInput: command,
+        //         response: result
+        //     }
+        // });
 
         switch (type) {
             case 'get_date':

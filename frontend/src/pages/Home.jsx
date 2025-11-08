@@ -116,62 +116,115 @@ export default function Home() {
         window.speechSynthesis.speak(utterance);
     };
 
-    const handleCommand = (data) => {
-        console.log('Command data:', data);
+    // const handleCommand = (data) => {
+    //     console.log('Command data:', data);
         
-        // Extract response data from different possible structures
-        let responseData = data;
-        if (data && data.data) {
-            responseData = data.data;
-        }
+    //     // Extract response data from different possible structures
+    //     let responseData = data;
+    //     if (data && data.data) {
+    //         responseData = data.data;
+    //     }
 
-        // If it's a string, just speak it
-        if (typeof responseData === 'string') {
-            speak(responseData);
-            return;
-        }
+    //     // If it's a string, just speak it
+    //     if (typeof responseData === 'string') {
+    //         speak(responseData);
+    //         return;
+    //     }
 
-        const { type, userInput, response, userinput } = responseData || {};
-        const query = userInput || userinput || '';
+    //     const { type, userInput, response, userinput } = responseData || {};
+    //     const query = userInput || userinput || '';
         
-        // Speak the response if available
-        if (response) {
-            const utterance = new SpeechSynthesisUtterance(response);
-            window.speechSynthesis.speak(utterance);
-        }
+    //     // Speak the response if available
+    //     if (response) {
+    //         const utterance = new SpeechSynthesisUtterance(response);
+    //         window.speechSynthesis.speak(utterance);
+    //     }
 
-        // Process the command
-        if (type === 'google_search' && query) {
-            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-        }
-        else if (type === 'calculator_open') {
-            window.open('https://www.google.com/search?q=calculator', '_blank');
-        }
-        else if (type === 'instagram_open') {
-            window.open('https://www.instagram.com/', '_blank');
-        }
-        else if (type === 'facebook_open') {
-            window.open('https://www.facebook.com/', '_blank');
-        }
-        else if (type === 'weather_show') {
-            window.open('https://www.google.com/search?q=weather', '_blank');
-        }
-        else if (type === 'youtube_search' || type === 'youtube_play') {
-            // If no specific query or just 'youtube', open YouTube homepage
-            if (!query || query.toLowerCase().includes('youtube')) {
-                window.open('https://www.youtube.com', '_blank');
-            } else {
-                // For search queries, clean and encode the query
-                const cleanQuery = query.replace(/^(search|play|find|look up|show me|open|on youtube|in youtube|youtube|you tube)\s*/i, '').trim();
-                if (cleanQuery) {
-                    window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(cleanQuery)}`, '_blank');
-                } else {
-                    window.open('https://www.youtube.com', '_blank');
+    //     // Process the command
+    //     if (type === 'google_search' && query) {
+    //         window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+    //     }
+    //     else if (type === 'calculator_open') {
+    //         window.open('https://www.google.com/search?q=calculator', '_blank');
+    //     }
+    //     else if (type === 'instagram_open') {
+    //         window.open('https://www.instagram.com/', '_blank');
+    //     }
+    //     else if (type === 'facebook_open') {
+    //         window.open('https://www.facebook.com/', '_blank');
+    //     }
+    //     else if (type === 'weather_show') {
+    //         window.open('https://www.google.com/search?q=weather', '_blank');
+    //     }
+    //     else if (type === 'youtube_search' || type === 'youtube_play') {
+    //         // If no specific query or just 'youtube', open YouTube homepage
+    //         if (!query || query.toLowerCase().includes('youtube')) {
+    //             window.open('https://www.youtube.com', '_blank');
+    //         } else {
+    //             // For search queries, clean and encode the query
+    //             const cleanQuery = query.replace(/^(search|play|find|look up|show me|open|on youtube|in youtube|youtube|you tube)\s*/i, '').trim();
+    //             if (cleanQuery) {
+    //                 window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(cleanQuery)}`, '_blank');
+    //             } else {
+    //                 window.open('https://www.youtube.com', '_blank');
                     
-                }
-            }
-        }
+    //             }
+    //         }
+    //     }
+    // }
+    const handleCommand = (data) => {
+  console.log('Command data:', data);
+
+  // Handle wrapped data from backend { success: true, data: { ... } }
+  const responseData = data?.data || data;
+
+  if (typeof responseData === 'string') {
+    speak(responseData);
+    return;
+  }
+
+  const { type, userinput, userInput, response } = responseData || {};
+  const query = userinput || userInput || '';
+
+  if (response) speak(response);
+
+  // Delay slightly before navigation (bypasses popup blocker)
+  setTimeout(() => {
+    if (type === 'google_search') {
+      const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+      openLink(url);
+    } 
+    else if (type === 'youtube_search') {
+      const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+      openLink(url);
+    } 
+    else if (type === 'youtube_play') {
+      openLink('https://www.youtube.com');
+    } 
+    else if (type === 'instagram_open') {
+      openLink('https://www.instagram.com');
+    } 
+    else if (type === 'facebook_open') {
+      openLink('https://www.facebook.com');
+    } 
+    else if (type === 'weather_show') {
+      openLink('https://www.google.com/search?q=weather');
+    } 
+    else if (type === 'calculator_open') {
+      openLink('https://www.google.com/search?q=calculator');
     }
+  }, 1000); // short delay helps avoid popup blocking
+};
+
+// A helper to handle browser popup restrictions
+const openLink = (url) => {
+  const newTab = window.open(url, '_blank');
+  if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
+    // Fallback: open in the same tab if popup blocked
+    window.location.href = url;
+  }
+};
+
 
 
     // Speech to text conversion
