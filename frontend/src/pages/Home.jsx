@@ -41,13 +41,12 @@ export default function Home() {
     }
   }
   const speak = (text) => {
-    const utterance = new SpeechSynthesisUtterance(text); 
-    utterance.lang='hi-IN';
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'hi-IN';
     // utterance.lang='mr-IN';
     const  voices = window.speechSynthesis.getVoices();
-    
-    const hindiVoice= voices.find(v=>v.lang === 'hi-IN');
-    if(hindiVoice){ utterance.voice = hindiVoice}
+    const hindiVoice = voices.find(v => v.lang === 'hi-IN');
+    if (hindiVoice) { utterance.voice = hindiVoice }
 
 
     isSpeakingRef.current = true;
@@ -213,7 +212,7 @@ export default function Home() {
         safeRecognization();
       }
     }, 10000)
-    // safeRecognization(); 
+    safeRecognization(); 
     return () => {
       recognition.stop();
       setListening(false);
