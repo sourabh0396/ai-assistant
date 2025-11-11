@@ -1,5 +1,5 @@
 import axios from "axios";
-const geminiResponse = async (command,assistantName,userName) => {
+const geminiResponse = async (command, assistantName, userName) => {
     try {
         const gemini_Url = process.env.GEMINI_API_URL;
         const prompt = `You are a virtual assistant named ${assistantName} created by ${userName}.
@@ -21,7 +21,7 @@ Instructions:
 - "response": A short voice-friendly reply, e.g., "Sure, playing it now", "Here's what I found", "Today is Tuesday", etc.
 
 Type meanings:
-- "general": if it's a factual or informational question.
+- "general": if it's a factual or informational question.aur agar koi aisa question puchta hai jiska answer tume pata hai usko bhi general ki category me rakho bas short answerdena.
 - "google_search": if user wants to search something on Google.
 - "youtube_search": if user wants to search something on YouTube.
 - "youtube_play": if user wants to directly play a video or song.
@@ -41,7 +41,7 @@ Important:
 now your userInput - ${command}
 `;
 
-// result t response
+        // result response
         const response = await axios.post(gemini_Url, {
             "contents": [{
                 "parts": [{ "text": prompt }]
@@ -54,7 +54,7 @@ now your userInput - ${command}
 
         // Extract the response text from the Gemini API response
         const responseText = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        
+
         if (!responseText) {
             console.error('Invalid response format from Gemini API:', response.data);
             throw new Error('Invalid response format from Gemini API');

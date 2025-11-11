@@ -46,10 +46,8 @@ export const updateAssistant = async (req, res) => {
 export const askToAssistant = async (req, res) => {
     try {
         const { command } = req.body;
-
-        //if command is not string or empty
         if (!command || typeof command !== 'string' || !command.trim()) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 success: false,
                 message: 'Command is required and must be a non-empty string'
             });
@@ -57,19 +55,20 @@ export const askToAssistant = async (req, res) => {
 
         const user = await User.findById(req.userId);
         if (!user) {
-            return res.status(404).json({ 
+            return res.status(404).json({
                 success: false,
                 message: errorMessages.USER.NOT_FOUND
             });
         }
-
+        user.history.push(command);
+        user.save()
         const userName = user.name || 'User';
         const assistantName = user.assistantName || 'Assistant';
-        
+
         console.log(`Processing command from ${userName} to ${assistantName}:`, command);
-        
+
         const result = await geminiResponse(command, assistantName, userName);
-        
+
         if (!result) {
             return res.status(500).json({
                 success: false,
@@ -98,7 +97,7 @@ export const askToAssistant = async (req, res) => {
                         data: parsedResult
                     });
                 }
-            //new added
+
             } catch (error) {
                 console.error('Error parsing JSON response:', error);
             }
