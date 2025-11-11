@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function Customize2() {
-    const { userData, backEndImage, selectdImage, ServerURL, setUserData } = useContext(userDataContext);
+    const { userData, backEndImage, selectedImage, ServerURL, setUserData } = useContext(userDataContext);
     const [assistantName, setAssistantName] = useState(userData?.assistantName || "");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -30,8 +30,8 @@ export default function Customize2() {
                 formData.append("assistantImage", backEndImage);
             }
             // If we have a selected image URL (not 'input'), append it as 'imageUrl'
-            else if (selectdImage && selectdImage !== 'input') {
-                formData.append("imageUrl", selectdImage);
+            else if (selectedImage && selectedImage !== 'input') {
+                formData.append("imageUrl", selectedImage);
             }
 
             const config = {
