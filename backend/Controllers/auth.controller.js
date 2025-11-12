@@ -25,7 +25,8 @@ export const signUp = async (req, res) => {
             httpOnly: true,
             maxAge: 60 * 60 * 1000,
             sameSite: "lax",
-            secure: false
+            secure: false,            
+            domain: ".onrender.com"||"localhost"
         })
         res.status(201).json(user)
 
