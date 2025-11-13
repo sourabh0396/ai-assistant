@@ -6,7 +6,8 @@ export const userDataContext = createContext();
 
 // Configure axios defaults
 const api = axios.create({
-    baseURL: 'http://localhost:5000/api',
+    // baseURL: 'http://localhost:5000/api',
+    baseURL: 'https://virtual-assistant-00v4.onrender.com/api',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
@@ -32,12 +33,13 @@ api.interceptors.response.use(
  */
 export default function UserContext({ children }) {
     // API configuration
-    const ServerURL = "http://localhost:5000";
+    // const ServerURL = "http://localhost:5000";
+    const ServerURL = 'https://virtual-assistant-00v4.onrender.com';
 
     // Authentication state
     const [userData, setUserData] = useState(null);
     const [authChecked, setAuthChecked] = useState(false);
-    
+
     // UI state
     const [frontEndImage, setFrontEndImage] = useState(null);
     const [backEndImage, setBackEndImage] = useState(null);

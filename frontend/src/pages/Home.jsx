@@ -305,6 +305,14 @@ export default function Home() {
     //   }
     // }, 10000)
     // safeRecognization();
+    // window.speechSynthesis.onvoiceschanged=()=>{
+      const greeting = new SpeechSynthesisUtterance(`Hello ${userData.name}, What can I help you with?`);
+      greeting.lang = 'hi-IN';
+      // greeting.onend=()=>{
+      //   startTimeout();
+      // }
+      // window.speechSynthesis.speak(greeting);
+    // };
     return () => {
       isMounted = false;
       clearTimeout(startTimeout);
