@@ -24,8 +24,8 @@ export const signUp = async (req, res) => {
         res.cookie("token", Token, {
             httpOnly: true,
             maxAge: 60 * 60 * 1000,
-            sameSite: "lax",
-            secure: false
+            secure: true,       // required for https (Render)
+            sameSite: "none",
         })
         res.status(201).json(user)
 
@@ -63,8 +63,9 @@ export const Login = async (req, res) => {
         res.cookie("token", Token, {
             httpOnly: true,
             maxAge: 60 * 60 * 1000,
-            sameSite: "lax",
-            secure: false
+            secure: true,       // required for https (Render)
+            sameSite: "none",
+            // domain: ".onrender.com" // ||"localhost"
         })
         res.status(200).json(user)
 

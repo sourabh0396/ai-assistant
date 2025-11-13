@@ -19,10 +19,11 @@ app.use(cors({
             'http://localhost:5173',
             'http://localhost:3000',
             'http://127.0.0.1:5173',
-            'http://127.0.0.1:3000'
+            'http://127.0.0.1:3000',
+            'https://ai-assistant-fe.onrender.com',
         ];
 
-        if (allowedOrigins.includes(origin) || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+        if (allowedOrigins.includes(origin) || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:') || origin.startsWith('https://ai-assistant-fe.onrender.com')) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
