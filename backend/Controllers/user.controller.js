@@ -80,6 +80,18 @@ export const askToAssistant = async (req, res) => {
 
         // If the response is already an object, use it directly
         if (typeof result === 'object' && result !== null) {
+            // Handle time-related responses immediately
+            if (result.type === 'get_time') {
+                return res.json({
+                    success: true,
+                    data: {
+                        type: 'get_time',
+                        userInput: result.userinput || command,
+                        response: `The current time is ${moment().format('h:mm:ss A')}`
+                    }
+                });
+            }
+            
             return res.json({
                 success: true,
                 data: result
@@ -103,15 +115,8 @@ export const askToAssistant = async (req, res) => {
             }
         }
 
-        // If we get here, return the raw result
-        // return res.json({
-        //     success: true,
-        //     data: {
-        //         type: 'general',
-        //         userInput: command,
-        //         response: result
-        //     }
-        // });
+        // If we get here, return the raw result as general response
+       
 
         switch (type) {
             case 'get_date':
