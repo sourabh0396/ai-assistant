@@ -52,9 +52,22 @@ app.get("/", async (req, res) => {
 })
 
 
+// Determine if running in production (on Render)
+const isRender = process.env.RENDER === 'true';
+const isProduction = process.env.NODE_ENV === 'production' || isRender;
+
 app.listen(port, () => {
-    connectDb()
-    console.log(`Server Started on http://localhost:${port}`)
+    connectDb();
+    
+    const serverUrl = isProduction 
+        ? 'https://virtual-assistant-00v4.onrender.com' 
+        : `http://localhost:${port}`;
+        
+    console.log(`Server is running in ${isProduction ? 'production' : 'development'} mode`);
+    console.log(`Server URL: ${serverUrl}`);
+    if (!isProduction) {
+        console.log(`Local development server: http://localhost:${port}`);
+    }
 })
 
 // console.log(process.env.MONGODB_URL);
