@@ -1,5 +1,7 @@
 # AI Assistant
 
+https://ai-assistant-fe.onrender.com/
+
 A full-stack AI assistant application with React frontend and Node.js backend.
 
 ## Features
